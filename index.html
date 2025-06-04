@@ -42,47 +42,60 @@
     const API_URL = "https://booking-backend-kmy5.onrender.com";
 
     async function loadSlots() {
-      const res = await fetch(`${API_URL}/api/available-slots`);
-      const slots = await res.json();
+      try {
+        const res = await fetch(`${API_URL}/available-slots`);
+        const slots = await res.json();
 
-      const container = document.getElementById("slots");
-      container.innerHTML = "";
+        const container = document.getElementById("slots");
+        container.innerHTML = "";
 
-      if (!slots.length) {
-        container.innerHTML = "No slots available. Check back soon.";
-        return;
+        if (!slots.length) {
+          container.innerHTML = "No slots available. Check back soon.";
+          return;
+        }
+
+        slots.forEach(slot => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "slot";
+
+          const startTime = new Date(slot.start);
+          const label = document.createElement("span");
+          label.textContent = startTime.toLocaleString();
+
+          const btn = document.createElement("button");
+          btn.textContent = "Secure Your Spot";
+          btn.onclick = async () => {
+            console.log("✅ Button clicked");
+
+            try {
+              const res = await fetch(`${API_URL}/create-checkout-session`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({})
+              });
+
+              const data = await res.json();
+              if (data.url) {
+                window.location.href = data.url;
+              } else {
+                alert("Something went wrong. Please try again.");
+              }
+            } catch (err) {
+              console.error("Error during booking:", err);
+              alert("Error: Could not connect to payment system.");
+            }
+          };
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(btn);
+          container.appendChild(wrapper);
+        });
+      } catch (err) {
+        document.getElementById("slots").innerHTML = "Error loading slots.";
+        console.error("Error fetching slots:", err);
       }
-
-      slots.forEach(slot => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "slot";
-
-        const startTime = new Date(slot.start);
-        const label = document.createElement("span");
-        label.textContent = startTime.toLocaleString();
-
-        const btn = document.createElement("button");
-        btn.textContent = "Secure Your Spot";
-        btn.onclick = async () => {
-          const res = await fetch(`${API_URL}/create-checkout-session`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              name: "Test User",
-              email: "testuser@example.com",
-              slot: slot
-            })
-          });
-          const data = await res.json();
-          window.location.href = data.url;
-        };
-
-        wrapper.appendChild(label);
-        wrapper.appendChild(btn);
-        container.appendChild(wrapper);
-      });
     }
 
     loadSlots();
