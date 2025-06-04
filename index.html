@@ -35,7 +35,7 @@
   </style>
 </head>
 <body>
-  <h2>Select a Time Slot</h2>
+  <h2>Join Us</h2>
   <div id="slots">Loading...</div>
 
   <script>
@@ -64,7 +64,7 @@
         const btn = document.createElement("button");
         btn.textContent = "Secure Your Spot";
         btn.onclick = async () => {
-          const res = await fetch(`${API_URL}/api/create-checkout-session`, {
+          const res = await fetch(`${API_URL}/create-checkout-session`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
