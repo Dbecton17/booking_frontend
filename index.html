@@ -79,7 +79,8 @@
   console.log("🎯 Checkout session response:", data);
 
   if (data.url) {
-    window.location.href = data.url;
+    window.open(data.url, '_blank');
+
   } else {
     alert("Something went wrong. Please try again.");
   }
