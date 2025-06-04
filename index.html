@@ -57,6 +57,8 @@
       console.error("Error fetching slots:", err);
     }
   }
-
-  loadSlots();
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    loadSlots();
+  });
 </script>
