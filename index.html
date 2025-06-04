@@ -66,25 +66,28 @@
         btn.onclick = async () => {
           console.log("✅ Button clicked");
 
-          try {
-            const res = await fetch(`${API_URL}/api/create-checkout-session`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({})
-            });
+         try {
+  const res = await fetch(`${API_URL}/api/create-checkout-session`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({})
+  });
 
-            const data = await res.json();
-            if (data.url) {
-              window.location.href = data.url;
-            } else {
-              alert("Something went wrong. Please try again.");
-            }
-          } catch (err) {
-            console.error("Error during booking:", err);
-            alert("Error: Could not connect to payment system.");
-          }
+  const data = await res.json();
+  console.log("🎯 Checkout session response:", data);
+
+  if (data.url) {
+    window.location.href = data.url;
+  } else {
+    alert("Something went wrong. Please try again.");
+  }
+} catch (err) {
+  console.error("🔥 Fetch error:", err);
+  alert("Error: Could not connect to payment system.");
+}
+
         };
 
         wrapper.appendChild(label);
