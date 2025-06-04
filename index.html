@@ -62,9 +62,9 @@
         label.textContent = startTime.toLocaleString();
 
         const btn = document.createElement("button");
-        btn.textContent = "Book";
+        btn.textContent = "Secure Your Spot";
         btn.onclick = async () => {
-          const res = await fetch(`${API_URL}/api/book-slot`, {
+          const res = await fetch(`${API_URL}/api/create-checkout-session`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
